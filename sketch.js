@@ -2,27 +2,29 @@ $(function() {
     $('#show-words').hide();
     $('#show-radicals').hide();
     $('#show-percentage').hide();
+    $('#show-genradical').hide();
 
 
     var showWords = $('#show-words');
     var showRadicals = $('#show-radicals');
     var showPercentage = $('#show-percentage');
+    var showGenRadicals = $('#show-genradical');
 
     
     $.getJSON('http://localhost:3000/db', function (data) {
     
         var words = data.words;
         var radicals = data.radicals;
+        var suffixes = data.sufixos;
 
-        $('#get-data').click(function () {
+        $('#get_words').click(function () {
             if(words.length){
                 var content = '<li>'+ words.join('</li><li>') +'</li>';
                 var list = $('<ul />').html(content);
 
                 showWords.append(list);
             }
-            $('#show-words').toggle();
-            $('#show-radicals').hide();
+            showWords.toggle();
         });
 
         $('#get_radicals').click(function () {
@@ -36,26 +38,43 @@ $(function() {
             $('#show-words').hide();
         });
         
-        $('#get_percentage').click(function (hits) {
+
+        $('#get_percentage').click(function () {
+
             var hits = 0;
-            $('#show-words').hide();
-            $('#show-radicals').hide();
+            var listNewRadicals = [];
+ 
+            for (var w = 0; w < words.length ; w++) {
 
+                var haveAlreadyCount = 0;
+                var wordSize =  words[w].length;
 
-            for (var w = 0; w < words.length; w++){
-                //console.log(words[w]);  // with you wanna see inside the loop of all words
-                for(var r = 0; r < radicals.length; r++){
-                    //console.log(radicals[r]);  // with you wanna see the lopp inside de radicals
-                    if ( words[w].indexOf(radicals[r]) != -1 ) {
-                        hits = hits + 1;
-                        console.log("  "+ words[w] + " tem : "+ radicals[r] + "  Qtd :"+ hits);//see all comparations
+                for (var s = 0; s < suffixes.length; s++) {
+                    var sufixSize = suffixes[s].length;
+                    
+                    if(words[w].endsWith(suffixes[s]) ==  true){
+                        while(haveAlreadyCount < 1){
+                            var cutWord = (wordSize - sufixSize) - 1;
+                                                        
+                            listNewRadicals[w] = words[w].slice(0, cutWord);
+
+                            console.log(listNewRadicals[w]);
+
+                            haveAlreadyCount = 1;
+                        }
+
                     }
-                }
+
+                }                 
             }
-            showPercentage.html("<h1>"+ hits + "</h1>");
+
+            var fnlPercent = Math.floor(( hits * 100 )/ 1000);
+            showPercentage.html("<h1>"+ fnlPercent + "% acertos</h1>");
 
             $('#show-percentage').toggle();
         });
+
+
     
       });
 });
