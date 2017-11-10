@@ -4,7 +4,7 @@
 
 <h2>Descrição</h2>
 
-<p>Este trabalho almeja pegar uma amostra de 1000 palavras e comparar com uma lista de radicais pre-estabelecidos</p>
+<p>Este trabalho almeja pegar uma amostra de 1000 palavras, reconhecer seus sufixos, retira-los deixando apenas o radical e comparar com uma lista de radicais pre-estabelecidos.</p>
 
 <h2>Como Rodar? (Para quem realmente não sabe nada deste mundo) </h2>
 
